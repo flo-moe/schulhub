@@ -96,6 +96,13 @@
         .btn-primary:active {
             transform: scale(0.98);
         }
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+            font-size: 15px;
+            margin-top: 10px;
+        }
 
         /* 🚀 MAIN CONTENT & HERO */
         main {
@@ -121,7 +128,7 @@
             color: #475569;
         }
 
-        /* 🗺️ DASHBOARD VORSCHAU (GRID-SYSTEM) */
+        /* 🗺️ DASHBOARD VORSCHAU */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -144,7 +151,6 @@
             align-items: center;
             gap: 8px;
         }
-        
         .live-title { color: #16a34a; }
         .admin-title { color: #2563eb; }
         .tools-title { color: #7c3aed; }
@@ -166,12 +172,111 @@
             align-items: center;
             gap: 12px;
         }
-        
         .icon-placeholder {
             width: 8px;
             height: 8px;
             background-color: #94a3b8;
             border-radius: 50%;
+        }
+
+        /* 🔒 AUTH MODAL (POPUPS) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .modal-close:hover {
+            color: #64748b;
+        }
+        .modal-box h2 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: #020617;
+        }
+        .modal-box p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        /* 📝 FORMULARE */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #475569;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-group input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .modal-footer-text {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 20px;
+        }
+        .modal-footer-text a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .modal-footer-text a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -180,31 +285,23 @@
     <!-- 🌐 NAVIGATIONBAR -->
     <nav>
         <div class="nav-container">
-            
-            <a href="#" class="logo">
-                schulhub<span>.ch</span>
-            </a>
-
+            <a href="#" class="logo">schulhub<span>.ch</span></a>
             <div class="nav-buttons">
-                <a href="/register" class="btn-secondary">Account erstellen</a>
-                <a href="/login" class="btn-primary">Anmelden</a>
+                <!-- JavaScript-Trigger hinzugefügt -->
+                <button onclick="openModal('register')" class="btn-secondary">Account erstellen</button>
+                <button onclick="openModal('login')" class="btn-primary">Anmelden</button>
             </div>
-
         </div>
     </nav>
 
     <!-- 🚀 HAUPTINHALT -->
     <main>
-        
         <div class="hero">
             <h1>Dein gesamter Unterricht an einem Ort.</h1>
             <p>Verbinde all deine digitalen Werkzeuge, Klassenübersichten und Dokumente in einem einzigen, blitzschnellen Cockpit.</p>
         </div>
 
-        <!-- 🗺️ DASHBOARD VORSCHAU (FUNKTIONS-ORIENTIERT) -->
         <div class="dashboard-grid">
-            
-            <!-- Kategorie 1: Live-Unterricht -->
             <div class="card">
                 <div class="card-title live-title">● Live-Unterricht</div>
                 <div class="item-list">
@@ -212,8 +309,6 @@
                     <div class="list-item"><div class="icon-placeholder"></div> Schüler auslosen & würfeln</div>
                 </div>
             </div>
-
-            <!-- Kategorie 2: Plattformen & Admin -->
             <div class="card">
                 <div class="card-title admin-title">● Plattformen & Admin</div>
                 <div class="item-list">
@@ -221,8 +316,6 @@
                     <div class="list-item"><div class="icon-placeholder"></div> Noten eintragen & Absenzen verwalten</div>
                 </div>
             </div>
-
-            <!-- Kategorie 3: Speicher & Tools -->
             <div class="card">
                 <div class="card-title tools-title">● Speicher & Tools</div>
                 <div class="item-list">
@@ -230,10 +323,7 @@
                     <div class="list-item"><div class="icon-placeholder"></div> Unterrichtsmaterial gestalten</div>
                 </div>
             </div>
-
         </div>
-
     </main>
 
-</body>
-</html>
+    <!-- 🔒 LOGIN / REGISTER MODAL OVERLAY -->
